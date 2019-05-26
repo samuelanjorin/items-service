@@ -4,6 +4,7 @@ import asyncF from '../middlewares/async'
 import service from '../services/category'
 import globalFunc from '../utils/globalfunc'
 import constants from '../constants/index'
+import cache from '../utils/cache'
 
 let field = 'cat_id'
 function findCategoryByDepartment () {
@@ -76,8 +77,13 @@ function findCategoryByProduct () {
     })
   })
 }
-function findAllCategories (req, res) {
+function findAllCategories () {
   return asyncF(async (req, res) => {
+    let value = await cache.checkCache(req.originalUrl)
+    if (value !== null) {
+      return res.json(value).status(constants.NETWORK_CODES.HTTP_SUCCESS)
+    }
+    
     const { page, limit } = req.query
     const numberOfPage = parseInt(page, 10) || 1
     const pageLimit = parseInt(limit, 10) || 20
@@ -89,6 +95,7 @@ function findAllCategories (req, res) {
       count: allTogether,
       rows: allCategories
     }
+    cache.addToCache(req.originalUrl, result, constants.CACHE_TYPES.hour)
     return res.json(result).status(constants.NETWORK_CODES.HTTP_SUCCESS)
   })
 }
