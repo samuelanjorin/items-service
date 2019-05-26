@@ -9,6 +9,10 @@ import cache from '../utils/cache'
 let field = 'cat_id'
 function findCategoryByDepartment () {
   return asyncF(async (req, res) => {
+    let value = await cache.checkCache(req.originalUrl)
+    if (value !== null) {
+      return res.json(value).status(constants.NETWORK_CODES.HTTP_SUCCESS)
+    }
     const { department_id } = req.params
     const parsedId = parseInt(department_id, 10)
     if (!isNaN(parsedId)) {
@@ -18,6 +22,7 @@ function findCategoryByDepartment () {
         }
       })
       if (!isEmpty(allCategories)) {
+        cache.addToCache(req.originalUrl, allCategories, constants.CACHE_TYPES.hour)
         return res.json(allCategories).status(constants.NETWORK_CODES.HTTP_SUCCESS)
       }
       return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
@@ -35,11 +40,16 @@ function findCategoryByDepartment () {
 }
 function findOneCategory () {
   return asyncF(async (req, res) => {
+    let value = await cache.checkCache(req.originalUrl)
+    if (value !== null) {
+      return res.json(value).status(constants.NETWORK_CODES.HTTP_SUCCESS)
+    }
     const { id } = req.params
     const parsedId = parseInt(id, 10)
     if (!isNaN(parsedId)) {
       const oneCategory = await service.findCategory(id)
       if (!isEmpty(oneCategory)) {
+        cache.addToCache(req.originalUrl, oneCategory, constants.CACHE_TYPES.hour)
         return res.json(oneCategory.dataValues).status(constants.NETWORK_CODES.HTTP_SUCCESS)
       }
       return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
@@ -53,6 +63,10 @@ function findOneCategory () {
 
 function findCategoryByProduct () {
   return asyncF(async (req, res) => {
+    let value = await cache.checkCache(req.originalUrl)
+    if (value !== null) {
+      return res.json(value).status(constants.NETWORK_CODES.HTTP_SUCCESS)
+    }
     const { product_id } = req.params
     const parsedId = parseInt(product_id, 10)
     if (!isNaN(parsedId)) {
@@ -60,8 +74,9 @@ function findCategoryByProduct () {
       if (!isEmpty(allProducts)) {
         const productCategory = []
         allProducts.forEach((category) => {
-          productCategory.push(category.Category)
+          productCategory.push(category.category)
         })
+        cache.addToCache(req.originalUrl, productCategory, constants.CACHE_TYPES.hour)
         return res.json(productCategory).status(constants.NETWORK_CODES.HTTP_SUCCESS)
       }
       return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
@@ -83,7 +98,6 @@ function findAllCategories () {
     if (value !== null) {
       return res.json(value).status(constants.NETWORK_CODES.HTTP_SUCCESS)
     }
-    
     const { page, limit } = req.query
     const numberOfPage = parseInt(page, 10) || 1
     const pageLimit = parseInt(limit, 10) || 20
