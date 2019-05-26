@@ -6,32 +6,43 @@ import service from '../services/product'
 import paginate, { getAllAvailableProducts, manualPaginate,
   filterProductsCategories } from '../utils/products'
 import constants from '../constants/index'
+import cache from '../utils/cache'
 
 let field = 'product_id'
 function findAllProducts () {
   return asyncF(async (req, res) => {
+    let value = await cache.checkCache(req.originalUrl)
+    if (value !== null) {
+      return res.json(value).status(constants.NETWORK_CODES.HTTP_SUCCESS)
+    }
     const { numberOfPage, pageLimit, descriptionLength } = globalFunc.getPageParams(req.query)
 
     const allProducts = await service.findAllProducts(paginate({
       numberOfPage, pageLimit
     }))
-    const allCount = await service.size
+    const allCount = await service.size()
     const allAvailableProducts =
                         getAllAvailableProducts(allProducts, descriptionLength)
     const result = {
       count: allCount,
       rows: allAvailableProducts
     }
+    cache.addToCache(req.originalUrl, result, constants.CACHE_TYPES.hour)
     return res.json(result).status(constants.NETWORK_CODES.HTTP_SUCCESS)
   })
 }
 
 function findOneProduct () {
   return asyncF(async (req, res) => {
+    let value = await cache.checkCache(req.originalUrl)
+    if (value !== null) {
+      return res.json(value).status(constants.NETWORK_CODES.HTTP_SUCCESS)
+    }
     const { id } = req.params
     if (globalFunc.isValueValid(id).valid) {
       const product = await service.findOneProduct(id)
       if (!isEmpty(product)) {
+        cache.addToCache(req.originalUrl, product, constants.CACHE_TYPES.hour)
         return res.json(product).status(constants.NETWORK_CODES.HTTP_SUCCESS)
       }
       return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
@@ -50,6 +61,10 @@ function findOneProduct () {
 
 function findProductsByCategory () {
   return asyncF(async (req, res) => {
+    let value = await cache.checkCache(req.originalUrl)
+    if (value !== null) {
+      return res.json(value).status(constants.NETWORK_CODES.HTTP_SUCCESS)
+    }
     const { category_id } = req.params
     const { numberOfPage, pageLimit, descriptionLength } = globalFunc.getPageParams(req.query)
 
@@ -68,6 +83,7 @@ function findProductsByCategory () {
           count,
           rows: allAvailableProducts
         }
+        cache.addToCache(req.originalUrl, result, constants.CACHE_TYPES.hour)
         return res.json(result).status(constants.NETWORK_CODES.HTTP_SUCCESS)
       }
       return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
@@ -86,6 +102,10 @@ function findProductsByCategory () {
 
 function findProductsByDepartment () {
   return asyncF(async (req, res) => {
+    let value = await cache.checkCache(req.originalUrl)
+    if (value !== null) {
+      return res.json(value).status(constants.NETWORK_CODES.HTTP_SUCCESS)
+    }
     const { department_id } = req.params
     const { numberOfPage, pageLimit, descriptionLength } = globalFunc.getPageParams(req.query)
     if (globalFunc.isValueValid(department_id).valid) {
@@ -96,6 +116,7 @@ function findProductsByDepartment () {
         const params = paginate({ numberOfPage, pageLimit })
         const result =
                         manualPaginate(allAvailableProducts, params)
+        cache.addToCache(req.originalUrl, result, constants.CACHE_TYPES.hour)
         return res.json(result).status(constants.NETWORK_CODES.HTTP_SUCCESS)
       }
       return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
@@ -114,11 +135,16 @@ function findProductsByDepartment () {
 
 function findProductsLocation () {
   return asyncF(async (req, res) => {
+    let value = await cache.checkCache(req.originalUrl)
+    if (value !== null) {
+      return res.json(value).status(constants.NETWORK_CODES.HTTP_SUCCESS)
+    }
     const { id } = req.params
     if (globalFunc.isValueValid(id).valid) {
       const productCategories = await
       service.findLocations(id)
       if (!isEmpty(productCategories)) {
+        cache.addToCache(req.originalUrl, filterProductsCategories(productCategories), constants.CACHE_TYPES.hour)
         return res.json(filterProductsCategories(productCategories)).status(constants.NETWORK_CODES.HTTP_SUCCESS)
       }
       return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
@@ -137,22 +163,27 @@ function findProductsLocation () {
 
 function findProductsReviews () {
   return asyncF(async (req, res) => {
+    let value = await cache.checkCache(req.originalUrl)
+    if (value !== null) {
+      return res.json(value).status(constants.NETWORK_CODES.HTTP_SUCCESS)
+    }
     const { product_id } = req.params
     if (globalFunc.isValueValid(product_id)) {
       const productReviews = await
       service.findReviews(product_id)
       if (!isEmpty(productReviews)) {
+        cache.addToCache(req.originalUrl, productReviews, constants.CACHE_TYPES.hour)
         return res.json(productReviews).status(constants.NETWORK_CODES.HTTP_SUCCESS)
       }
       return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
-        code: globalFunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.CAT_02),
-        message: constants.ERROR_CODES.CAT_02,
+        code: globalFunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.PRD_02),
+        message: constants.ERROR_CODES.PRD_02,
         field
       })
     }
     return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
-      code: globalFunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.CAT_01),
-      message: constants.ERROR_CODES.CAT_01,
+      code: globalFunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.PRD_01),
+      message: constants.ERROR_CODES.PRD_01,
       field
     })
   })
@@ -200,8 +231,11 @@ function addProductsReviews () {
       return res.json([]).status(constants.NETWORK_CODES.HTTP_SUCCESS)
     }
 
-    return this.httpErrorResponse(req, res, 'PRO_01',
-      `The ID ${product_id} is not a number`, 'product_id')
+    return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
+      code: globalFunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.PRD_01),
+      message: constants.ERROR_CODES.PRD_01,
+      field
+    })
   })
 }
 export default {

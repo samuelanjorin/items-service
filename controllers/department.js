@@ -4,7 +4,7 @@ import asyncF from '../middlewares/async'
 import globalFunc from '../utils/globalfunc'
 import constants from '../constants/index'
 import cache from '../utils/cache'
-let field = 'dep_id'
+let field = 'department_id'
 function findAllDepartments () {
   return asyncF(async (req, res) => {
     let value = await cache.checkCache(req.originalUrl)

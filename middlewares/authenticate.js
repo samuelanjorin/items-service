@@ -33,9 +33,4 @@ const verifyUser = (req, res, next) => {
     })
   }
 }
-
-const generateToken = (customer_id) => {
-  return jwt.sign({ customer_id }, envconfig.appSecret, { expiresIn: envconfig.tokenExpiration })
-}
-
-export default { verifyUser, generateToken }
+export default { verifyUser }

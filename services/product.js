@@ -13,7 +13,7 @@ async function findAllProducts (option) {
 }
 
 async function size () {
-  return product.count()
+  return await product.count()
 }
 
 async function findCategories (id, paginationOption) {

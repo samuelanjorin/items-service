@@ -8,7 +8,7 @@ import globalFunc from '../utils/globalfunc'
 import constants from '../constants/index'
 import cache from '../utils/cache'
 
-let field = 'att_id'
+let field = 'attribute_id'
 function findAllAttributes () {
   return asyncF(async (req, res) => {
     let value = await cache.checkCache(req.originalUrl)

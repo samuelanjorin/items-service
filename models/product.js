@@ -42,7 +42,7 @@ export default (sequelize, Sequelize) => {
     product.belongsToMany(db.category, {
       foreignKey: 'product_id',
       otherKey: 'category_id',
-      through: 'Product_Category'
+      through: 'product_category'
     })
   }
   return product

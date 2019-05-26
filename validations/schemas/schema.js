@@ -20,8 +20,13 @@ const review = Joi.string()
   .trim()
   .min(1)
   .label('review')
+const product_id = Joi.number()
+  .integer()
+  .min(1)
+  .label('product_id')
 
 export const productReviewSchema = Joi.object().keys({
   review,
-  rating
+  rating,
+  product_id
 })

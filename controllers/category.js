@@ -6,7 +6,7 @@ import globalFunc from '../utils/globalfunc'
 import constants from '../constants/index'
 import cache from '../utils/cache'
 
-let field = 'cat_id'
+let field = 'category_id'
 function findCategoryByDepartment () {
   return asyncF(async (req, res) => {
     let value = await cache.checkCache(req.originalUrl)
