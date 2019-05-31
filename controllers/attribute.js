@@ -1,5 +1,4 @@
 /* eslint-disable camelcase */
-import isEmpty from 'lodash.isempty'
 import attributeService from '../services/attributes'
 import attributeValueService from '../services/attributeValue'
 import productattributeService from '../services/productAttribute'
@@ -31,8 +30,8 @@ function findOneAttribute () {
     const parsedId = parseInt(id, 10)
     if (!isNaN(parsedId)) {
       const oneAttribute = await attributeService.findAttribute(id)
-      if (!isEmpty(oneAttribute)) {
-        cache.addToCache(req.originalUrl, oneAttribute, constants.CACHE_TYPES.hour)  
+      if (oneAttribute !== null) {
+        cache.addToCache(req.originalUrl, oneAttribute, constants.CACHE_TYPES.hour)
         return res.json(oneAttribute.dataValues).status(constants.NETWORK_CODES.HTTP_SUCCESS)
       }
       return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
@@ -59,7 +58,7 @@ function findOneAttributeValue () {
     const parsedId = parseInt(value_id, 10)
     if (!isNaN(parsedId)) {
       const oneAttibuteValue = await attributeValueService.findAllAttributeValues(value_id)
-      if (!isEmpty(oneAttibuteValue)) {
+      if (oneAttibuteValue !== null) {
         cache.addToCache(req.originalUrl, oneAttibuteValue, constants.CACHE_TYPES.hour)
         return res.json(oneAttibuteValue).status(constants.NETWORK_CODES.HTTP_SUCCESS)
       }
@@ -85,7 +84,7 @@ function findAllProductAttributes () {
     }
     const { product_id } = req.params
     const allProductAttributes = await productattributeService.findAllAttributeValues(product_id)
-    if (!isEmpty(allProductAttributes)) {
+    if (allProductAttributes !== null) {
       const allProducts = []
       allProductAttributes.forEach((attribute) => {
         allProducts.push({ attribute_value_id:
