@@ -1,5 +1,5 @@
 import config from './envconfig'
-import Sequelize from 'sequelize'
+import Sequelize from '../../turing-users-service/node_modules/sequelize/types'
 import logger from '../utils/errors/errorlogger'
 
 const dbConfig = config[process.env.NODE_ENV]

@@ -1,7 +1,7 @@
 
 import fs from 'fs'
 import path from 'path'
-import Sequelize from 'sequelize'
+import Sequelize from '../../turing-users-service/node_modules/sequelize/types'
 import sequelize from '../config/database'
 
 const basename = path.basename(__filename)
