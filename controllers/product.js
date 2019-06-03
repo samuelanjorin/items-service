@@ -34,6 +34,7 @@ function findAllProducts () {
 
 function findOneProduct () {
   return asyncF(async (req, res) => {
+    console.log("ghvjbknl bjnk")
     let value = await cache.checkCache(req.originalUrl)
     if (value !== null) {
       return res.json(value).status(constants.NETWORK_CODES.HTTP_SUCCESS)

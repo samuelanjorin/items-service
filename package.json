@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=dev jest",
-    "serve": "nodemon index.js --exec babel-node",
+    "test": "NODE_ENV=test jest",
+    "serve": "NODE_ENV=production nodemon index.js --exec babel-node",
+    "migrate": "NODE_ENV=production babel-node  migrations/migrate.js",
     "compile": "babel src --out-dir .compiled --source-maps --watch"
   },
   "keywords": [],

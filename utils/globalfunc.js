@@ -59,7 +59,5 @@ function getToken (req) {
   const userKey = user_key.split(' ')
   return userKey[1]
 }
-function maskCreditCard (creditCard) {
-  return ((creditCard.length === 12) ? 'XXXXXXXX' + creditCard.substr(8, creditCard.length - 1) : creditCard)
-}
-export default { getKeyByValue, getUniqueId, getPageParams, isValueValid, createCustomerJSON, convertObjectValuesRecursive, getToken, maskCreditCard }
+
+export default { getKeyByValue, getUniqueId, getPageParams, isValueValid, createCustomerJSON, convertObjectValuesRecursive, getToken }
