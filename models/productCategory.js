@@ -21,10 +21,6 @@ export default (sequelize, Sequelize) => {
     })
   }
 
-  productCategory.countAllProducts = function (category_id) {
-    return this.count({ where: { category_id } })
-  }
-
   productCategory.removeAttribute('id')
 
   return productCategory

@@ -10,7 +10,9 @@ export default ({ numberOfPage, pageLimit }) => {
 
 export const getAllAvailableProducts = (array, descriptionLength, option = true) => {
   const allAvailableProducts = []
+
   if (option) {
+   
     array.forEach((product) => {
       const productDescription = descriptionLength >= product.description.length
         ? product.description
@@ -21,11 +23,12 @@ export const getAllAvailableProducts = (array, descriptionLength, option = true)
     return allAvailableProducts
   }
   if (option === false) {
+    
     array.forEach((product) => {
-      const productDescription = descriptionLength >= product.Product.description.length
-        ? product.Product.description
-        : `${product.Product.description.slice(0, descriptionLength)}...`
-      allAvailableProducts.push({ ...product.Product.dataValues,
+      const productDescription = descriptionLength >= product.description.length
+        ? product.description
+        : `${product.description.slice(0, descriptionLength)}...`
+      allAvailableProducts.push({ ...product.dataValues,
         description: productDescription })
     })
 

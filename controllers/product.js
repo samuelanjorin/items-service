@@ -73,16 +73,28 @@ function findProductsByCategory () {
                         await service
                           .findCategories(category_id,
                             { ...paginate({ numberOfPage, pageLimit }) })
-
       const count = await service.countAllCategories(category_id)
 
       if (!isEmpty(allProducts)) {
         const allAvailableProducts =
                     getAllAvailableProducts(allProducts, descriptionLength, false)
-        const result = {
-          count,
-          rows: allAvailableProducts
+        let products = allAvailableProducts[0].products
+        let productArray = []
+        let i = 0
+        for (i = 0; i < products.length; i++) {
+          productArray.push({
+            product_id: products[i].product_id,
+            name: products[i].name,
+            description: products[i].description,
+            price: products[i].price,
+            thumbnail: products[i].thumbnail
+          })
         }
+        const result = {
+          count: products.length,
+          rows: productArray
+        }
+
         cache.addToCache(req.originalUrl, result, constants.CACHE_TYPES.hour)
         return res.json(result).status(constants.NETWORK_CODES.HTTP_SUCCESS)
       }

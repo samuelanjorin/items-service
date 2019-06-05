@@ -1,17 +1,17 @@
 /* eslint-disable no-return-assign */
 import Joi from '@hapi/joi'
 import constants from '../constants/index'
+import globalfunc from '../utils/globalfunc'
 
 const schema = Joi.object().keys({
   review: Joi.string().required('').trim().strict().label('review'),
-  product_id: Joi.number().integer().required().strict().label('product_id'),
-  rating: Joi.number().integer().required().label('tax_id')
+  rating: Joi.number().integer().required().label('rating')
 
 })
 export default (req, res, next) => {
   const { error } = Joi.validate(req.body, schema)
-  if (error) {
-    console.log(error)
+  const productId = req.params.product_id
+  if (error && !globalfunc.isValueValid(productId)) {
     let message = error.details[0].message
     message = message.replace(/"/g, '')
     res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({

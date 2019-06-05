@@ -32,7 +32,7 @@ function findOneDepartment () {
         return res.json(oneDepartment).status(constants.NETWORK_CODES.HTTP_SUCCESS)
       }
       return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
-        code: globalFunc.findKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.DEP_02),
+        code: globalFunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.DEP_02),
         message: constants.ERROR_CODES.DEP_02,
         field
       })
