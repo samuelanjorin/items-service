@@ -73,8 +73,7 @@ function findProductsByCategory () {
                         await service
                           .findCategories(category_id,
                             { ...paginate({ numberOfPage, pageLimit }) })
-      const count = await service.countAllCategories(category_id)
-
+     
       if (!isEmpty(allProducts)) {
         const allAvailableProducts =
                     getAllAvailableProducts(allProducts, descriptionLength, false)
