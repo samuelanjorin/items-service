@@ -1,8 +1,5 @@
 /* eslint-disable camelcase */
 import shortId from 'shortid'
-import { removePassword } from '../utils/passwordcrypt'
-// import constants from '../constants';
-import envconfig from '../config/envconfig'
 
 function getKeyByValue (object, value) {
   return Object.keys(object).find(key => object[key] === value)
@@ -26,22 +23,6 @@ const isValueValid = (id) => {
   !isNaN(parsedId) && (valid = true)
   return { valid, parsedId }
 }
-const createCustomerJSON = (customer, accessToken) => {
-  
-  if (customer.credit_card !== null) {
-    let credit_card = customer.credit_card
-    customer.creditCard = maskCreditCard(credit_card)
-  }
-
-  let customerDetails = {
-    customer: { schema: removePassword(customer) }
-  }
-  let tokenObject = {
-    accessToken,
-    expires_in: envconfig.tokenExpiration
-  }
-  return Object.assign(customerDetails, tokenObject)
-}
 function convertObjectValuesRecursive (obj, target, replacement) {
   obj = { ...obj }
   Object.keys(obj).forEach((key) => {
@@ -60,4 +41,4 @@ function getToken (req) {
   return userKey[1]
 }
 
-export default { getKeyByValue, getUniqueId, getPageParams, isValueValid, createCustomerJSON, convertObjectValuesRecursive, getToken }
+export default { getKeyByValue, getUniqueId, getPageParams, isValueValid, convertObjectValuesRecursive, getToken }

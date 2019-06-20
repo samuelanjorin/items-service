@@ -12,7 +12,6 @@ export const getAllAvailableProducts = (array, descriptionLength, option = true)
   const allAvailableProducts = []
 
   if (option) {
-   
     array.forEach((product) => {
       const productDescription = descriptionLength >= product.description.length
         ? product.description
@@ -23,7 +22,6 @@ export const getAllAvailableProducts = (array, descriptionLength, option = true)
     return allAvailableProducts
   }
   if (option === false) {
-    
     array.forEach((product) => {
       const productDescription = descriptionLength >= product.description.length
         ? product.description
