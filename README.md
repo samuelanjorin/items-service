@@ -29,3 +29,10 @@ It handles the below Items features:
 16. Get Category By ID: http://3.130.189.86:8000/items-service/v1/api/categories/2
 17. Get Categories By Product ID: http://3.130.189.86:8000/items-service/v1/api/categories/inProduct/1
 18. Get categories By Department: http://3.130.189.86:8000/items-service/v1/api/categories/inDepartment/1
+
+# Microservice Architecture Documentation: https://drive.google.com/file/d/1d8kSf8xTtmmtyWEhn56nqC4CubaOv8Eg/view?usp=sharing
+
+
+
+
+
