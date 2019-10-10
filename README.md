@@ -1,6 +1,6 @@
 # turing-items-service
 
-        This is on one the services of Turing Eccomerce Microservices. 
+        This is the items-service of Turing Eccomerce Microservices. 
 
 # Deployed on Port http://Host:7008
 
